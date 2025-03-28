@@ -34,10 +34,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh;
+    height: 45vh;
     background-size: cover;
     background-position: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     overflow: hidden;
 }
 
@@ -66,10 +66,15 @@
     font-size: 0.9375rem;;
 }
 
+.search-bar label{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .image-icon {
     width: 30px; /* Ajusta el tamaño según necesites */
     height: 30px;
-    margin-right: 10px;
     cursor: pointer;
 }
 

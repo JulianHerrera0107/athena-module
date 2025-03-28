@@ -10,11 +10,14 @@
 <div >
     <div class="row row-wrapper">
         <form name="customForm" class="col-sm-12">
-            <div class="searchContainer" style="background-image: url('{$module_dir}/views/img/fondo-colombia.jpg');">
+            <div class="searchContainer" style="background-image: url('{$module_dir}/views/img/searcher_cs.jpg');">
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
-                    <input type="text" name="user_input" placeholder='{$input_prompt_placeholder}'/>
-                    <img id="upload-button" src="{$module_dir}/views/img/image-icon.png" alt="Upload Image" class="image-icon"/>
+                    <input type="text" name="user_input" id="user_input" placeholder='{$input_prompt_placeholder}'/>
+                    <label for="file-input" accept="image/*" name="file-input">
+                    <img id="upload-button" src="{$module_dir}/views/img/image_icon.png" 
+                    alt="{* Subir imagen *}{$upload_image_button}" class="image-icon"/>
+                    </label>
                     <button type="submit">{* Buscar *} {$search_button}</button>
                 </div>
             </div>
