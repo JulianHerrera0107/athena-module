@@ -8,8 +8,9 @@ use PrestaShop\PrestaShop\Core\Product\Search\SortOrder;
 use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Adapter\Product\ProductAssembler;
 use PrestaShop\PrestaShop\Adapter\NewProducts\ProductSearchProvider;
+use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
-class Athena extends Module
+class Athena extends Module implements WidgetInterface
 {
     protected $config_form = false;
 
@@ -349,53 +350,92 @@ class Athena extends Module
         }
     }
 
-    public function hookDisplayAthenaContent($params){
-        $cmsId = Tools::getValue('id_cms');
+    public function hookDisplayAthenaContent($params) {
+        // Cargar el archivo JavaScript del módulo
+        $this->context->controller->registerJavascript(
+            'athena-js',
+            'modules/' . $this->name . '/views/js/athena.js',
+            ['position' => 'bottom', 'priority' => 150]
+        );
+        
+        // Cargar el archivo CSS del módulo
+        $this->context->controller->registerStylesheet(
+            'athena-css',
+            'modules/' . $this->name . '/views/css/athena.css',
+            ['media' => 'all', 'priority' => 150]
+        );
+        
+        // Definir las variables de Athena
         $api_url = Configuration::get('ATHENA_API_URL');
         $api_analyze_url = Configuration::get('ATHENA_API_ANALYZE_URL');
         $recommended_subcategories = Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES');
         $recommended_treshold = Configuration::get('ATHENA_RECOMMENDED_TRESHOLD');
-
-        Media::addJsDef(array(
-            "api_url" => $api_url . $api_analyze_url,
-            "recommended_subcategories" => $recommended_subcategories,
-            "recommended_treshold" => $recommended_treshold
-        ));
-
-        $title = Configuration::get('ATHENA_TITLE');
-        $subtitle = Configuration::get('ATHENA_SUBTITLE');
-        $image_logo_path = Configuration::get('ATHENA_LOGO');
-        $legal_disclaimer = Configuration::get('ATHENA_LEGAL_DISCLAIMER');
-        $left_panel_name = Configuration::get('ATHENA_LEFT_PANEL_NAME');
-        $image_label = Configuration::get('ATHENA_IMAGE_LABEL');
-        $drag_and_drop_image_label = Configuration::get('ATHENA_DRAG_AND_DROP_IMAGE_LABEL');
-        $upload_image_button = Configuration::get('ATHENA_UPLOAD_IMAGE_BUTTON');
-        $input_prompt = Configuration::get('ATHENA_INPUT_PROMPT');
-        $input_prompt_placeholder = Configuration::get('ATHENA_INPUT_PROMPT_PLACEHOLDER');
-        $search_button = Configuration::get('ATHENA_SEARCH_BUTTON');
-
+        
+        Media::addJsDef([
+            'athena_api_url' => $api_url . $api_analyze_url,
+            'athena_recommended_subcategories' => $recommended_subcategories,
+            'athena_recommended_treshold' => $recommended_treshold
+        ]);
+        
+        // Asignar variables a Smarty
+        $this->context->smarty->assign([
+            'module_dir' => $this->_path,
+            'title' => Configuration::get('ATHENA_TITLE'),
+            'subtitle' => Configuration::get('ATHENA_SUBTITLE'),
+            'image_logo_path' => _MODULE_DIR_ . $this->name . '/views/img/' . Configuration::get('ATHENA_LOGO'),
+            'legal_disclaimer' => Configuration::get('ATHENA_LEGAL_DISCLAIMER'),
+            'left_panel_name' => Configuration::get('ATHENA_LEFT_PANEL_NAME'),
+            'image_label' => Configuration::get('ATHENA_IMAGE_LABEL'),
+            'drag_and_drop_image_label' => Configuration::get('ATHENA_DRAG_AND_DROP_IMAGE_LABEL'),
+            'upload_image_button' => Configuration::get('ATHENA_UPLOAD_IMAGE_BUTTON'),
+            'input_prompt' => Configuration::get('ATHENA_INPUT_PROMPT'),
+            'input_prompt_placeholder' => Configuration::get('ATHENA_INPUT_PROMPT_PLACEHOLDER'),
+            'search_button' => Configuration::get('ATHENA_SEARCH_BUTTON'),
+            'api_url' => $api_url
+        ]);
+        
+        return $this->display(__FILE__, 'views/templates/hook/fullpage.tpl');
+    }
+    
+    public function renderWidget($hookName, array $configuration) {
+        $this->getWidgetVariables($hookName, $configuration);
+        return $this->fetch('module:athena/views/templates/hook/fullpage.tpl');
+    }
+    
+    public function getWidgetVariables($hookName, array $configuration) {
+        // Definir las variables de hookDisplayAthenaContent
         $api_url = Configuration::get('ATHENA_API_URL');
-
-        if ($cmsId == 7) {
-
-            $this->context->smarty->assign([
-                'module_dir' => $this->_path,
-                'title' => $title,
-                'subtitle' => $subtitle,
-                'image_logo_path' => $image_logo_path,
-                'legal_disclaimer' => $legal_disclaimer,
-                'left_panel_name' => $left_panel_name,
-                'image_label' => $image_label,
-                'drag_and_drop_image_label' => $drag_and_drop_image_label,
-                'upload_image_button' => $upload_image_button,
-                'input_prompt' => $input_prompt,
-                'input_prompt_placeholder' => $input_prompt_placeholder,
-                'search_button' => $search_button,
-                'api_url' => $api_url
-            ]);
-
-            return $this->display(__FILE__, 'views/templates/hook/fullpage.tpl');
-        }
+        
+        $this->context->controller->registerJavascript(
+            'athena-js',
+            'modules/' . $this->name . '/views/js/athena.js',
+            ['position' => 'bottom', 'priority' => 150]
+        );
+        
+        Media::addJsDef([
+            'athena_api_url' => $api_url . Configuration::get('ATHENA_API_ANALYZE_URL'),
+            'athena_recommended_subcategories' => Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES'),
+            'athena_recommended_treshold' => Configuration::get('ATHENA_RECOMMENDED_TRESHOLD')
+        ]);
+        
+        $variables = [
+            'module_dir' => $this->_path,
+            'title' => Configuration::get('ATHENA_TITLE'),
+            'subtitle' => Configuration::get('ATHENA_SUBTITLE'),
+            'image_logo_path' => _MODULE_DIR_ . $this->name . '/views/img/' . Configuration::get('ATHENA_LOGO'),
+            'legal_disclaimer' => Configuration::get('ATHENA_LEGAL_DISCLAIMER'),
+            'left_panel_name' => Configuration::get('ATHENA_LEFT_PANEL_NAME'),
+            'image_label' => Configuration::get('ATHENA_IMAGE_LABEL'),
+            'drag_and_drop_image_label' => Configuration::get('ATHENA_DRAG_AND_DROP_IMAGE_LABEL'),
+            'upload_image_button' => Configuration::get('ATHENA_UPLOAD_IMAGE_BUTTON'),
+            'input_prompt' => Configuration::get('ATHENA_INPUT_PROMPT'),
+            'input_prompt_placeholder' => Configuration::get('ATHENA_INPUT_PROMPT_PLACEHOLDER'),
+            'search_button' => Configuration::get('ATHENA_SEARCH_BUTTON'),
+            'api_url' => $api_url
+        ];
+        
+        $this->context->smarty->assign($variables);
+        return $variables;
     }
 
     private function callAthenaAPI($api_url, $update_path)
