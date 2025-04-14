@@ -351,30 +351,32 @@ class Athena extends Module implements WidgetInterface
     }
 
     public function hookDisplayAthenaContent($params) {
-        // Cargar el archivo JavaScript del módulo
+        // Cargar el archivo JS
         $this->context->controller->registerJavascript(
             'athena-js',
             'modules/' . $this->name . '/views/js/athena.js',
             ['position' => 'bottom', 'priority' => 150]
         );
         
-        // Cargar el archivo CSS del módulo
+        // Cargar el archivo CSS
         $this->context->controller->registerStylesheet(
             'athena-css',
             'modules/' . $this->name . '/views/css/athena.css',
             ['media' => 'all', 'priority' => 150]
         );
         
-        // Definir las variables de Athena
+        // Definir TODAS las variables JS necesarias
+        $link = new Link;
+        $ajax_link = $link->getModuleLink('athena','search');
         $api_url = Configuration::get('ATHENA_API_URL');
         $api_analyze_url = Configuration::get('ATHENA_API_ANALYZE_URL');
-        $recommended_subcategories = Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES');
-        $recommended_treshold = Configuration::get('ATHENA_RECOMMENDED_TRESHOLD');
         
         Media::addJsDef([
+            'ajax_link' => $ajax_link,
             'athena_api_url' => $api_url . $api_analyze_url,
-            'athena_recommended_subcategories' => $recommended_subcategories,
-            'athena_recommended_treshold' => $recommended_treshold
+            'api_url' => $api_url . $api_analyze_url,
+            'recommended_subcategories' => Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES'),
+            'recommended_treshold' => Configuration::get('ATHENA_RECOMMENDED_TRESHOLD')
         ]);
         
         // Asignar variables a Smarty
@@ -382,7 +384,7 @@ class Athena extends Module implements WidgetInterface
             'module_dir' => $this->_path,
             'title' => Configuration::get('ATHENA_TITLE'),
             'subtitle' => Configuration::get('ATHENA_SUBTITLE'),
-            'image_logo_path' => _MODULE_DIR_ . $this->name . '/views/img/' . Configuration::get('ATHENA_LOGO'),
+            'image_logo_path' => _MODULE_DIR_ . $this->name . '/views/img/' . basename(Configuration::get('ATHENA_LOGO')),
             'legal_disclaimer' => Configuration::get('ATHENA_LEGAL_DISCLAIMER'),
             'left_panel_name' => Configuration::get('ATHENA_LEFT_PANEL_NAME'),
             'image_label' => Configuration::get('ATHENA_IMAGE_LABEL'),
@@ -398,6 +400,17 @@ class Athena extends Module implements WidgetInterface
     }
     
     public function renderWidget($hookName, array $configuration) {
+        //Cargamos el ajax_link para evitar la recarga de la página
+        $link = new Link;
+        $ajax_link = $link->getModuleLink('athena','search');
+        
+        Media::addJsDef([
+            'ajax_link' => $ajax_link,
+            'api_url' => Configuration::get('ATHENA_API_URL') . Configuration::get('ATHENA_API_ANALYZE_URL'),
+            'recommended_subcategories' => Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES'),
+            'recommended_treshold' => Configuration::get('ATHENA_RECOMMENDED_TRESHOLD')
+        ]);
+        
         $this->getWidgetVariables($hookName, $configuration);
         return $this->fetch('module:athena/views/templates/hook/fullpage.tpl');
     }
@@ -411,12 +424,6 @@ class Athena extends Module implements WidgetInterface
             'modules/' . $this->name . '/views/js/athena.js',
             ['position' => 'bottom', 'priority' => 150]
         );
-        
-        Media::addJsDef([
-            'athena_api_url' => $api_url . Configuration::get('ATHENA_API_ANALYZE_URL'),
-            'athena_recommended_subcategories' => Configuration::get('ATHENA_RECOMMENDED_SUBCATEGORIES'),
-            'athena_recommended_treshold' => Configuration::get('ATHENA_RECOMMENDED_TRESHOLD')
-        ]);
         
         $variables = [
             'module_dir' => $this->_path,
