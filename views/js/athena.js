@@ -3,7 +3,6 @@ $(document).ready(function() {
     var isMobile = window.innerWidth <= 768;
 
     $('#customForm').on('submit', function(event) {
-        event.preventDefault();
         $('#products-main-container').hide();
         $('#ajax-loader').show();
 
@@ -26,18 +25,12 @@ $(document).ready(function() {
             formData.set('user_input', ' ');
         }
 
-        formData.set('api_url', api_url || athena_api_url);
+        formData.set('api_url', api_url);
         formData.set('recommended_subcategories', recommended_subcategories);
         formData.set('recommended_treshold', recommended_treshold);
         formData.set('isMobile', isMobile);
 
-        // Verifica que ajax_link está disponible
-        if (typeof ajax_link === 'undefined') {
-            console.error('ajax_link no está definido');
-            $('#ajax-loader').hide();
-            return;
-        }
-        
+        event.preventDefault();
         $.ajax({
             url: ajax_link,
             type: 'POST',
@@ -108,4 +101,3 @@ $(document).ready(function() {
 
     });
 });
-
