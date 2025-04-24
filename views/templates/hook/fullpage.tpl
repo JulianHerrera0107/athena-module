@@ -54,9 +54,6 @@
             <h1 class="text-uppercase title">
                 {$left_panel_name}
             </h1>
-            <p class="facet-title">
-                {$image_label}
-            </p>
             <div class="inputContainer">
                 <div name="drop-area" id="drop-area" class="drop-area">
                     <span id="TextArea" class="TextArea">

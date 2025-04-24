@@ -21,6 +21,12 @@ $(document).ready(function() {
         showInterface();
     });
 
+    // Mostrar interfaz cuando el usuario hace clic en el botón de búsqueda
+    $('#searchButton').on('click', function() {
+        console.log("Botón de búsqueda presionado");
+        showInterface();
+    });    
+
     // Manejo del envío del formulario
     $('#customForm').on('submit', function(event) {
         event.preventDefault();
