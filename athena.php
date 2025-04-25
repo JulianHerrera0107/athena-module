@@ -161,7 +161,7 @@ class Athena extends Module implements WidgetInterface
             'ATHENA_LEGAL_DISCLAIMER' => Configuration::get('ATHENA_LEGAL_DISCLAIMER', $this->l('Si bien nuestra plataforma de inteligencia artificial tiene como objetivo ayudar a los usuarios a seleccionar los productos necesarios para sus proyectos de arte o manualidades basados en indicaciones y cargas de imágenes, no podemos garantizar la precisión o adecuación de las recomendaciones proporcionadas, Creative Studio & Co. junto con cualquier organización afiliada no se hace responsable de ninguna discrepancia entre los productos sugeridos y las expectativas o resultados de los usuarios. Se alienta a los usuarios a ejercer su propio criterio y juicio al utilizar nuestra plataforma y comprar productos para sus proyectos.')),
             'ATHENA_LEFT_PANEL_NAME' => Configuration::get('ATHENA_LEFT_PANEL_NAME', $this->l('Athena')),
             'ATHENA_IMAGE_LABEL' => Configuration::get('ATHENA_IMAGE_LABEL', $this->l('Sube una imagen')),
-            'ATHENA_DRAG_AND_DROP_IMAGE_LABEL' => Configuration::get('ATHENA_DRAG_AND_DROP_IMAGE_LABEL', $this->l('Arrastra y suelta el archivo aquí')),
+            'ATHENA_DRAG_AND_DROP_IMAGE_LABEL' => Configuration::get('ATHENA_DRAG_AND_DROP_IMAGE_LABEL', $this->l('Arrastra y suelta una imagen aquí')),
             'ATHENA_UPLOAD_IMAGE_BUTTON' => Configuration::get('ATHENA_UPLOAD_IMAGE_BUTTON', $this->l('Subir imagen')),
             'ATHENA_INPUT_PROMPT' => Configuration::get('ATHENA_INPUT_PROMPT', $this->l('O escribe una descripción')),
             'ATHENA_INPUT_PROMPT_PLACEHOLDER' => Configuration::get('ATHENA_INPUT_PROMPT_PLACEHOLDER', $this->l('Ejemplo: Mi hijo quiere pintar un cuadro de Mickey Mouse ¿Que productos necesito?')),

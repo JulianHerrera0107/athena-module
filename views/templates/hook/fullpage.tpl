@@ -59,9 +59,6 @@
                     <span id="TextArea" class="TextArea">
                         {$drag_and_drop_image_label}
                     </span>
-                    <label for="file-input" id="upload-button" class="upload-button">
-                        {$upload_image_button}
-                    </label>
                 </div>
             </div>
         </div>
